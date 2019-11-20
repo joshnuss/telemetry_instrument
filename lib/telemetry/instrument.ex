@@ -24,9 +24,7 @@ defmodule Telemetry.Instrument do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
 
-    event
-    |> to_name()
-    |> :telemetry.execute(%{increment: by, tags: tags})
+    execute(event, %{increment: by, tags: tags})
   end
 
   @doc """
@@ -47,13 +45,11 @@ defmodule Telemetry.Instrument do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
 
-    event
-    |> to_name()
-    |> :telemetry.execute(%{decrement: by, tags: tags})
+    execute(event, %{decrement: by, tags: tags})
   end
 
   @doc """
-  Measure a how long a function takes.
+  Measures duration of function call.
 
   ## Examples
 
@@ -69,9 +65,7 @@ defmodule Telemetry.Instrument do
 
     {time, value} = :timer.tc(fun)
 
-    :ok = event
-      |> to_name()
-      |> :telemetry.execute(%{time: time, tags: tags})
+    :ok = execute(event, %{time: time, tags: tags})
 
     value
   end
@@ -84,5 +78,11 @@ defmodule Telemetry.Instrument do
     name
     |> String.split(".")
     |> Enum.map(&String.to_atom/1)
+  end
+
+  defp execute(event, payload) do
+    event
+      |> to_name()
+      |> :telemetry.execute(payload)
   end
 end
