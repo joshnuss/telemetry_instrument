@@ -24,7 +24,7 @@ defmodule Telemetry.Instrument do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
 
-    execute(event, %{increment: by, tags: tags})
+    publish(event, %{increment: by, tags: tags})
   end
 
   @doc """
@@ -45,7 +45,7 @@ defmodule Telemetry.Instrument do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
 
-    execute(event, %{decrement: by, tags: tags})
+    publish(event, %{decrement: by, tags: tags})
   end
 
   @doc """
@@ -65,7 +65,7 @@ defmodule Telemetry.Instrument do
 
     {time, value} = :timer.tc(fun)
 
-    :ok = execute(event, %{time: time, tags: tags})
+    :ok = publish(event, %{time: time, tags: tags})
 
     value
   end
@@ -80,7 +80,7 @@ defmodule Telemetry.Instrument do
     |> Enum.map(&String.to_atom/1)
   end
 
-  defp execute(event, payload) do
+  defp publish(event, payload) do
     event
     |> to_name()
     |> :telemetry.execute(payload)
