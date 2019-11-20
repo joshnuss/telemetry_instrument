@@ -4,6 +4,7 @@ defmodule Telemetry.Instrument do
   """
 
   @type event_name :: [atom()] | String.t
+  @type tags :: [String.t]
 
   @doc """
   Increment a value
@@ -18,7 +19,7 @@ defmodule Telemetry.Instrument do
       :ok
 
   """
-  @spec increment(event_name, [by: integer()]) :: :ok
+  @spec increment(event_name, [by: integer(), tags: tags]) :: :ok
   def increment(event, opts \\ []) do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
@@ -41,7 +42,7 @@ defmodule Telemetry.Instrument do
       :ok
 
   """
-  @spec decrement(event_name, [by: integer()]) :: :ok
+  @spec decrement(event_name, [by: integer(), tags: tags]) :: :ok
   def decrement(event, opts \\ []) do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
