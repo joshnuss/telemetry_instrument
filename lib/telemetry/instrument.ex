@@ -59,7 +59,7 @@ defmodule Telemetry.Instrument do
       :pew_pew_pew
 
   """
-  @spec measure(event_name, fun(), tags: tags) :: :ok
+  @spec measure(event_name, fun(), tags: tags) :: any
   def measure(event, fun, opts \\ []) do
     tags = Keyword.get(opts, :tags, [])
 
