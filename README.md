@@ -1,11 +1,40 @@
 # Telemetry.Instrument
 
-**TODO: Add description**
+Convenience functions for Elixir's [telemetry](https://github.com/beam-telemetry/telemetry).
+This is wrapper on top of `:telemery.execute`.
+
+## Increment
+
+Increment a counter:
+
+```elixir
+increment("spaceship.engines", by: 20, tags: ["check-engine-light:enabled"])
+
+```
+
+## Decrement
+
+Decrement a counter:
+
+```elixir
+increment("spaceship.engines", by: 2, tags: ["check-engine-light:disabled"])
+
+```
+
+## Measure
+
+Measure how long a function takes:
+
+```elixir
+def fire_lasers, do: :pew_pew_pew
+
+measure("spaceship.lasers.fire", &fire_lasers/0, tags: ["great-success"])
+
+```
+
+##
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `telemetry_instrument` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -15,7 +44,4 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/telemetry_instrument](https://hexdocs.pm/telemetry_instrument).
-
+Documentation can be found at [https://hexdocs.pm/telemetry_instrument](https://hexdocs.pm/telemetry_instrument).
