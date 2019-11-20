@@ -23,6 +23,24 @@ defmodule Telemetry.Instrument do
     |> :telemetry.execute(%{increment: by})
   end
 
+  @doc """
+  Decrement a value
+
+  ## Examples
+
+      iex> Telemetry.Instrument.decrement("spaceship.engines.active")
+      :ok
+      iex> Telemetry.Instrument.decrement("spaceship.engines.active", 10)
+      :ok
+
+  """
+  @spec decrement(event_name) :: :ok
+  def decrement(event, by \\ 1) do
+    event
+    |> to_name()
+    |> :telemetry.execute(%{decrement: by})
+  end
+
   defp to_name(name) when is_list(name) do
     Enum.map(name, &String.to_atom/1)
   end

@@ -23,4 +23,15 @@ defmodule Telemetry.InstrumentTest do
     assert increment("spaceship.lasers", 10) == :ok
     assert_received {[:spaceship, :lasers], %{increment: 10}}
   end
+
+  test "decrement" do
+    assert decrement("spaceship.lasers") == :ok
+    assert_received {[:spaceship, :lasers], %{decrement: 1}}
+
+    assert decrement(["spaceship", "lasers"]) == :ok
+    assert_received {[:spaceship, :lasers], %{decrement: 1}}
+
+    assert decrement("spaceship.lasers", 10) == :ok
+    assert_received {[:spaceship, :lasers], %{decrement: 10}}
+  end
 end
