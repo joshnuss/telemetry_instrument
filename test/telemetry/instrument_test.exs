@@ -9,13 +9,18 @@ defmodule Telemetry.InstrumentTest do
   ]
 
   setup do
-    :telemetry.attach_many(__MODULE__, @events, fn event, measurement, _metadata, nil ->
-      send(self(), {event, measurement})
-    end, nil)
+    :telemetry.attach_many(
+      __MODULE__,
+      @events,
+      fn event, measurement, _metadata, nil ->
+        send(self(), {event, measurement})
+      end,
+      nil
+    )
 
-    on_exit fn ->
+    on_exit(fn ->
       :telemetry.detach(__MODULE__)
-    end
+    end)
   end
 
   test "increment" do

@@ -3,8 +3,8 @@ defmodule Telemetry.Instrument do
   Convenience functions for creating [telemetry](https://github.com/beam-telemetry/telemetry) events.
   """
 
-  @type event_name :: [atom()] | String.t
-  @type tags :: [String.t]
+  @type event_name :: [atom()] | String.t()
+  @type tags :: [String.t()]
 
   @doc """
   Increment a value.
@@ -19,7 +19,7 @@ defmodule Telemetry.Instrument do
       :ok
 
   """
-  @spec increment(event_name, [by: integer(), tags: tags]) :: :ok
+  @spec increment(event_name, by: integer(), tags: tags) :: :ok
   def increment(event, opts \\ []) do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
@@ -40,7 +40,7 @@ defmodule Telemetry.Instrument do
       :ok
 
   """
-  @spec decrement(event_name, [by: integer(), tags: tags]) :: :ok
+  @spec decrement(event_name, by: integer(), tags: tags) :: :ok
   def decrement(event, opts \\ []) do
     by = Keyword.get(opts, :by, 1)
     tags = Keyword.get(opts, :tags, [])
@@ -59,7 +59,7 @@ defmodule Telemetry.Instrument do
       :pew_pew_pew
 
   """
-  @spec measure(event_name, fun(), [tags: tags]) :: :ok
+  @spec measure(event_name, fun(), tags: tags) :: :ok
   def measure(event, fun, opts \\ []) do
     tags = Keyword.get(opts, :tags, [])
 
@@ -82,7 +82,7 @@ defmodule Telemetry.Instrument do
 
   defp execute(event, payload) do
     event
-      |> to_name()
-      |> :telemetry.execute(payload)
+    |> to_name()
+    |> :telemetry.execute(payload)
   end
 end
