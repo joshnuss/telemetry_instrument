@@ -7,7 +7,7 @@ defmodule Telemetry.Instrument do
   @type tags :: [String.t]
 
   @doc """
-  Increment a value
+  Increment a value.
 
   ## Examples
 
@@ -30,7 +30,7 @@ defmodule Telemetry.Instrument do
   end
 
   @doc """
-  Decrement a value
+  Decrement a value.
 
   ## Examples
 
@@ -50,6 +50,30 @@ defmodule Telemetry.Instrument do
     event
     |> to_name()
     |> :telemetry.execute(%{decrement: by, tags: tags})
+  end
+
+  @doc """
+  Measure a how long a function takes.
+
+  ## Examples
+
+      iex> Telemetry.Instrument.measure("spaceship.lasers.fire", fn -> :pew_pew_pew end)
+      :pew_pew_pew
+      iex> Telemetry.Instrument.measure("spaceship.lasers.fire", fn -> :pew_pew_pew end, tags: ["ready", "available"])
+      :pew_pew_pew
+
+  """
+  @spec measure(event_name, fun(), [tags: tags]) :: :ok
+  def measure(event, fun, opts \\ []) do
+    tags = Keyword.get(opts, :tags, [])
+
+    {time, value} = :timer.tc(fun)
+
+    :ok = event
+      |> to_name()
+      |> :telemetry.execute(%{time: time, tags: tags})
+
+    value
   end
 
   defp to_name(name) when is_list(name) do

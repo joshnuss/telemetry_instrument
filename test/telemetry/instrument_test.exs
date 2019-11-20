@@ -3,13 +3,18 @@ defmodule Telemetry.InstrumentTest do
   doctest Telemetry.Instrument
   import Telemetry.Instrument
 
+  @events [
+    [:spaceship, :lasers],
+    [:spaceship, :lasers, :fire]
+  ]
+
   setup do
-    :telemetry.attach(:test, [:spaceship, :lasers], fn event, measurement, _metadata, nil ->
+    :telemetry.attach_many(__MODULE__, @events, fn event, measurement, _metadata, nil ->
       send(self(), {event, measurement})
     end, nil)
 
     on_exit fn ->
-      :telemetry.detach(:test)
+      :telemetry.detach(__MODULE__)
     end
   end
 
@@ -39,5 +44,18 @@ defmodule Telemetry.InstrumentTest do
 
     assert decrement("spaceship.lasers", tags: ["available", "ready"]) == :ok
     assert_received {[:spaceship, :lasers], %{decrement: 1, tags: ["available", "ready"]}}
+  end
+
+  test "measure" do
+    fun = fn ->
+      Process.sleep(100)
+      42
+    end
+
+    assert measure("spaceship.lasers.fire", fun) == 42
+    assert_received {[:spaceship, :lasers, :fire], %{time: _, tags: []}}
+
+    assert measure("spaceship.lasers.fire", fun, tags: ["great-success"]) == 42
+    assert_received {[:spaceship, :lasers, :fire], %{time: _, tags: ["great-success"]}}
   end
 end
