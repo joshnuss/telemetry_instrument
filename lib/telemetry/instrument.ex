@@ -12,12 +12,14 @@ defmodule Telemetry.Instrument do
 
       iex> Telemetry.Instrument.increment("spaceship.engines.active")
       :ok
-      iex> Telemetry.Instrument.increment("spaceship.engines.active", 10)
+      iex> Telemetry.Instrument.increment("spaceship.engines.active", by: 10)
       :ok
 
   """
-  @spec increment(event_name) :: :ok
-  def increment(event, by \\ 1) do
+  @spec increment(event_name, [by: integer()]) :: :ok
+  def increment(event, opts \\ []) do
+    by = Keyword.get(opts, :by, 1)
+
     event
     |> to_name()
     |> :telemetry.execute(%{increment: by})
@@ -30,12 +32,14 @@ defmodule Telemetry.Instrument do
 
       iex> Telemetry.Instrument.decrement("spaceship.engines.active")
       :ok
-      iex> Telemetry.Instrument.decrement("spaceship.engines.active", 10)
+      iex> Telemetry.Instrument.decrement("spaceship.engines.active", by: 10)
       :ok
 
   """
-  @spec decrement(event_name) :: :ok
-  def decrement(event, by \\ 1) do
+  @spec decrement(event_name, [by: integer()]) :: :ok
+  def decrement(event, opts \\ []) do
+    by = Keyword.get(opts, :by, 1)
+
     event
     |> to_name()
     |> :telemetry.execute(%{decrement: by})
