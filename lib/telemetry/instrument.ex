@@ -1,18 +1,35 @@
 defmodule Telemetry.Instrument do
   @moduledoc """
-  Documentation for Telemetry.Instrument.
+  Convenience functions for creating [telemetry](https://github.com/beam-telemetry/telemetry) events.
   """
 
+  @type event_name :: [atom()] | String.t
+
   @doc """
-  Hello world.
+  Increment a value
 
   ## Examples
 
-      iex> Telemetry.Instrument.hello()
-      :world
+      iex> Telemetry.Instrument.increment("spaceship.engines.active")
+      :ok
+      iex> Telemetry.Instrument.increment("spaceship.engines.active", 10)
+      :ok
 
   """
-  def hello do
-    :world
+  @spec increment(event_name) :: :ok
+  def increment(event, by \\ 1) do
+    event
+    |> to_name()
+    |> :telemetry.execute(%{increment: by})
+  end
+
+  defp to_name(name) when is_list(name) do
+    Enum.map(name, &String.to_atom/1)
+  end
+
+  defp to_name(name) when is_binary(name) do
+    name
+    |> String.split(".")
+    |> Enum.map(&String.to_atom/1)
   end
 end
