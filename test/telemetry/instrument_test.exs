@@ -15,23 +15,29 @@ defmodule Telemetry.InstrumentTest do
 
   test "increment" do
     assert increment("spaceship.lasers") == :ok
-    assert_received {[:spaceship, :lasers], %{increment: 1}}
+    assert_received {[:spaceship, :lasers], %{increment: 1, tags: []}}
 
     assert increment(["spaceship", "lasers"]) == :ok
-    assert_received {[:spaceship, :lasers], %{increment: 1}}
+    assert_received {[:spaceship, :lasers], %{increment: 1, tags: []}}
 
     assert increment("spaceship.lasers", by: 10) == :ok
-    assert_received {[:spaceship, :lasers], %{increment: 10}}
+    assert_received {[:spaceship, :lasers], %{increment: 10, tags: []}}
+
+    assert increment("spaceship.lasers", tags: ["available", "ready"]) == :ok
+    assert_received {[:spaceship, :lasers], %{increment: 1, tags: ["available", "ready"]}}
   end
 
   test "decrement" do
     assert decrement("spaceship.lasers") == :ok
-    assert_received {[:spaceship, :lasers], %{decrement: 1}}
+    assert_received {[:spaceship, :lasers], %{decrement: 1, tags: []}}
 
     assert decrement(["spaceship", "lasers"]) == :ok
-    assert_received {[:spaceship, :lasers], %{decrement: 1}}
+    assert_received {[:spaceship, :lasers], %{decrement: 1, tags: []}}
 
     assert decrement("spaceship.lasers", by: 10) == :ok
-    assert_received {[:spaceship, :lasers], %{decrement: 10}}
+    assert_received {[:spaceship, :lasers], %{decrement: 10, tags: []}}
+
+    assert decrement("spaceship.lasers", tags: ["available", "ready"]) == :ok
+    assert_received {[:spaceship, :lasers], %{decrement: 1, tags: ["available", "ready"]}}
   end
 end
