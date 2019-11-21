@@ -58,9 +58,9 @@ defmodule Telemetry.InstrumentTest do
     end
 
     assert measure("spaceship.lasers.fire", fun) == 42
-    assert_received {[:spaceship, :lasers, :fire], %{time: _, tags: []}}
+    assert_received {[:spaceship, :lasers, :fire], %{duration: _, tags: []}}
 
     assert measure("spaceship.lasers.fire", fun, tags: ["great-success"]) == 42
-    assert_received {[:spaceship, :lasers, :fire], %{time: _, tags: ["great-success"]}}
+    assert_received {[:spaceship, :lasers, :fire], %{duration: _, tags: ["great-success"]}}
   end
 end

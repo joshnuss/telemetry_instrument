@@ -65,7 +65,7 @@ defmodule Telemetry.Instrument do
 
     {time, value} = :timer.tc(fun)
 
-    :ok = publish(event, %{time: time, tags: tags})
+    :ok = publish(event, %{duration: time, tags: tags})
 
     value
   end
