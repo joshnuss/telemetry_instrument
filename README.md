@@ -17,7 +17,7 @@ increment("spaceship.engines", by: 20, tags: ["check-engine-light:enabled"])
 Decrement a counter:
 
 ```elixir
-increment("spaceship.engines", by: 2, tags: ["check-engine-light:disabled"])
+decrement("spaceship.engines", by: 2, tags: ["check-engine-light:disabled"])
 
 ```
 
