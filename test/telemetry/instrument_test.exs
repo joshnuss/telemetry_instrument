@@ -35,6 +35,9 @@ defmodule Telemetry.InstrumentTest do
 
     assert increment("spaceship.lasers", tags: ["available", "ready"]) == :ok
     assert_received {[:spaceship, :lasers], %{increment: 1, tags: ["available", "ready"]}}
+
+    assert increment([:spaceship, :lasers]) == :ok
+    assert_received {[:spaceship, :lasers], %{increment: 1, tags: []}}
   end
 
   test "decrement" do
@@ -49,6 +52,9 @@ defmodule Telemetry.InstrumentTest do
 
     assert decrement("spaceship.lasers", tags: ["available", "ready"]) == :ok
     assert_received {[:spaceship, :lasers], %{decrement: 1, tags: ["available", "ready"]}}
+
+    assert decrement([:spaceship, :lasers]) == :ok
+    assert_received {[:spaceship, :lasers], %{decrement: 1, tags: []}}
   end
 
   test "measure" do
@@ -61,6 +67,9 @@ defmodule Telemetry.InstrumentTest do
     assert_received {[:spaceship, :lasers, :fire], %{duration: _, tags: []}}
 
     assert measure("spaceship.lasers.fire", fun, tags: ["great-success"]) == 42
+    assert_received {[:spaceship, :lasers, :fire], %{duration: _, tags: ["great-success"]}}
+
+    assert measure([:spaceship, :lasers, :fire], fun, tags: ["great-success"]) == 42
     assert_received {[:spaceship, :lasers, :fire], %{duration: _, tags: ["great-success"]}}
   end
 end

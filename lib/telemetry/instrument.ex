@@ -70,8 +70,8 @@ defmodule Telemetry.Instrument do
     value
   end
 
-  defp to_name(name) when is_list(name) do
-    Enum.map(name, &String.to_atom/1)
+  defp to_name(list) when is_list(list) do
+    Enum.map(list, &to_atom/1)
   end
 
   defp to_name(name) when is_binary(name) do
@@ -79,6 +79,9 @@ defmodule Telemetry.Instrument do
     |> String.split(".")
     |> Enum.map(&String.to_atom/1)
   end
+
+  defp to_atom(value) when is_atom(value), do: value
+  defp to_atom(value), do: String.to_atom(value)
 
   defp publish(event, payload) do
     event
