@@ -26,9 +26,13 @@ decrement("spaceship.engines", by: 2, tags: ["check-engine-light:disabled"])
 Measure how long a function takes:
 
 ```elixir
-def fire_lasers, do: :pew_pew_pew
+defmodule Lasers do
+  def fire do
+   :pew_pew_pew
+  end
+end
 
-measure("spaceship.lasers.fire", &fire_lasers/0, tags: ["great-success"])
+measure("spaceship.lasers.fire", &Lasers.fire/0, tags: ["great-success"])
 
 ```
 
