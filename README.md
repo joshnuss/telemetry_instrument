@@ -28,7 +28,8 @@ Measure how long a function takes:
 ```elixir
 defmodule Lasers do
   def fire do
-   :pew_pew_pew
+    Process.sleep(100)
+    :pew_pew_pew
   end
 end
 
